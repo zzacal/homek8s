@@ -1,0 +1,33 @@
+---
+- name: Mount Shares
+  hosts: all
+  tasks:
+     - name: Create credential file (used for fstab entry)
+       copy:
+         content: |
+           username="{{ USERNAME }}"
+           password="{{ PASSWORD }}"
+         dest: /mnt/.credential
+         mode: 0600
+       become: true
+ 
+     - name: Create fstab entry for product image folder share
+       mount: 
+         state: present 
+         fstype: cifs 
+         opts: "credentials=/mnt/.credential,file_mode=0777,dir_mode=0777" 
+         src: "{{ SHARE_PATH }}" 
+         path: "/mnt/{{ SHARE_NAME }}"
+       become: true
+
+     - name: Creates directory
+       file:
+         path: "/mnt/{{ SHARE_NAME }}"
+         state: directory
+       become: true
+ 
+     - name: Mount product image folder share
+       shell: |
+         mount '/mnt/{{ SHARE_NAME }}'
+       become: true
+ 
