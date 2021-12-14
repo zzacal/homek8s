@@ -1,7 +1,13 @@
 ---
-- name: Mount Shares
+- name: Mount Network Share
   hosts: all
   tasks:
+     - name: Unmount {{ SHARE_NAME }}
+       mount:
+         path: "/mnt/{{ SHARE_NAME }}"
+         state: unmounted
+       become: true
+
      - name: Create credential file (used for fstab entry)
        copy:
          content: |
@@ -11,7 +17,7 @@
          mode: 0600
        become: true
  
-     - name: Create fstab entry for product image folder share
+     - name: Create fstab entry for {{ SHARE_NAME }}
        mount: 
          state: present 
          fstype: cifs 
@@ -20,13 +26,13 @@
          path: "/mnt/{{ SHARE_NAME }}"
        become: true
 
-     - name: Creates directory
+     - name: Creates /mnt/{{ SHARE_NAME }}
        file:
          path: "/mnt/{{ SHARE_NAME }}"
          state: directory
-       become: true
- 
-     - name: Mount product image folder share
+       become: true    
+  
+     - name: Mount {{ SHARE_NAME }}
        shell: |
          mount '/mnt/{{ SHARE_NAME }}'
        become: true
