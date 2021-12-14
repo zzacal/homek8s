@@ -1,3 +1,15 @@
+# This ansible playbook mounts a network share on the listed nodes
+# vars:
+#   SHARE_NAME - name of share on hosts
+#   SHARE_PATH - path of share on network
+#   USERNAME - share user
+#   PASSWORD - user password
+#
+# example usage:
+#   ansible-playbook mount_shares.yml \
+#   -i inventory \
+#   -u someUser \
+#   --extra-vars "SHARE_NAME=magic_share SHARE_PATH=//server/sharename USERNAME=someuser PASSWORD=someuser_password"
 ---
 - name: Mount Network Share
   hosts: all
