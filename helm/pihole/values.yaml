@@ -1,0 +1,17 @@
+# This values file configures a deploy of the chart mojo2600/pihole
+# Sample usage:
+#   helm install --version '2.5.3' --namespace dns-resolver --values helm/pihole/values.yaml pihole mojo2600/pihole 
+persistentVolumeClaim:
+  enabled: true
+
+serviceWeb:
+  loadBalancerIP: 192.168.1.95
+  annotations:
+    metallb.universe.tf/allow-shared-ip: pihole-svc
+  type: LoadBalancer
+
+serviceDns:
+  loadBalancerIP: 192.168.1.93
+  annotations:
+    metallb.universe.tf/allow-shared-ip: pihole-svc
+  type: LoadBalancer
