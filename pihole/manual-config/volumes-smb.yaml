@@ -1,0 +1,60 @@
+---
+# Define pihole the StorageClass
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: smb
+provisioner: kubernetes.io/no-provisioner
+volumeBindingMode: WaitForFirstConsumer
+
+---
+# Define pihole a PersistentVolume
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pihole-smb-pihole-volume
+  labels:
+    directory: pihole
+spec:
+  capacity:
+    storage: 1Gi
+  accessModes:
+  - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Delete
+  storageClassName: smb
+  local:
+    path: /mnt/storage/pihole
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: In
+          values:
+          - kpi6
+
+---
+# Define dnsmasq a PersistentVolume
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pihole-smb-dnsmasq-volume
+  labels:
+    directory: dnsmasq.d
+spec:
+  capacity:
+    storage: 1Gi
+  accessModes:
+  - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Delete
+  storageClassName: smb
+  local:
+    path: /mnt/storage/dnsmasq
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: In
+          values:
+          - kpi5

@@ -1,0 +1,17 @@
+# Creates pihole directory
+# Requires /mnt/storage on all hosts
+# ansible-playbook pihole/manual-config/ansible-create-directories-smb.yaml -i ansible/inventory -u p
+---
+- name: Mount Network Share
+  hosts: all
+  tasks:
+     - name: Creates /mnt/storage/pihole
+       file:
+         path: "/mnt/storage/pihole"
+         state: directory
+       become: true
+     - name: Creates /mnt/storage/dnsmasq
+       file:
+         path: "/mnt/storage/dnsmasq"
+         state: directory
+       become: true    
