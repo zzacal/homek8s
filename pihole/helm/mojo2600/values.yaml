@@ -1,6 +1,6 @@
 # This values file configures a deploy of the chart mojo2600/pihole
 # Sample usage:
-#   helm install --version '2.5.3' --namespace dns-resolver --values helm/pihole/values.yaml pihole mojo2600/pihole 
+#   helm install --version '2.5.3' --namespace pihole --values values.yaml pihole mojo2600/pihole 
 persistentVolumeClaim:
   enabled: true
 
