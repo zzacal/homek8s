@@ -1,0 +1,73 @@
+# Deploys a single pihole replica accessibel via 192.168.1.160:8000/admin
+#  WARNING: Does not persist data because volume objects are not working
+#           
+---
+# Define deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pihole
+  labels:
+    app: pihole
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pihole
+  template:
+    metadata:
+      labels:
+        app: pihole
+        name: pihole
+    spec:
+      containers:
+      - name: pihole
+        image: pihole/pihole:latest
+        resources:
+          limits:
+            memory: 512Mi
+            cpu: "1"
+          requests:
+            memory: 256Mi
+            cpu: "0.2"
+        imagePullPolicy: Always
+        env:
+        - name: TZ
+          value: "America/Los_Angeles"
+        - name: WEBPASSWORD
+          value: "secret"
+        # volumeMounts:
+        # - name: pihole-local-pihole-volume
+        #   mountPath: "/etc/pihole"
+        # - name: pihole-local-dnsmasq-volume
+        #   mountPath: "/etc/dnsmasq"
+      # volumes:
+      # - name: pihole-local-pihole-volume
+      #   persistentVolumeClaim:
+      #     claimName: pihole-local-storage-claim
+      # - name: pihole-local-dnsmasq-volume
+      #   persistentVolumeClaim:
+      #     claimName: pihole-local-dnsmasq-claim
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: pihole
+spec:
+  selector:
+    app: pihole
+  ports:
+  - port: 8000
+    targetPort: 80
+    name: pihole-admin
+  - port: 53
+    targetPort: 53
+    protocol: TCP
+    name: dns-tcp
+  - port: 53
+    targetPort: 53
+    protocol: UDP
+    name: dns-udp
+  externalIPs:
+  - 192.168.1.160
