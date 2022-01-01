@@ -1,18 +1,19 @@
----
-# Define pihole the StorageClass
-apiVersion: storage.k8s.io/v1
-kind: StorageClass
-metadata:
-  name: local
-provisioner: kubernetes.io/no-provisioner
-volumeBindingMode: WaitForFirstConsumer
+# ---
+## Define pihole the StorageClass
+## Comment out because we are using the default storage class
+# apiVersion: storage.k8s.io/v1
+# kind: StorageClass
+# metadata:
+#   name: local
+# provisioner: rancher.io/local-path
+# volumeBindingMode: WaitForFirstConsumer
 
 ---
 # Define pihole a PersistentVolume
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: pihole-local-pihole-volume
+  name: pihole-volume
   labels:
     directory: pihole
 spec:
@@ -21,7 +22,6 @@ spec:
   accessModes:
   - ReadWriteOnce
   persistentVolumeReclaimPolicy: Delete
-  storageClassName: local
   local:
     path: /etc/pihole
   nodeAffinity:
@@ -32,13 +32,14 @@ spec:
           operator: In
           values:
           - 'kpi1'
+  # storageClassName: local
 
 ---
 # Define dnsmasq a PersistentVolume
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: pihole-local-dnsmasq-volume
+  name: dnsmasq-volume
   labels:
     directory: dnsmasq.d
 spec:
@@ -47,7 +48,6 @@ spec:
   accessModes:
   - ReadWriteOnce
   persistentVolumeReclaimPolicy: Delete
-  storageClassName: local
   local:
     path: /etc/dnsmasq
   nodeAffinity:
@@ -58,3 +58,4 @@ spec:
           operator: In
           values:
           - 'kpi5'
+  # storageClassName: local

@@ -1,5 +1,4 @@
 # Deploys a single pihole replica accessibel via 192.168.1.160:8000/admin
-#  WARNING: Does not persist data because volume objects are not working
 #           
 ---
 # Define deployment
@@ -36,15 +35,15 @@ spec:
           value: "America/Los_Angeles"
         - name: WEBPASSWORD
           value: "secret"
-        # volumeMounts:
-        # - name: pihole-local-pihole-volume
-        #   mountPath: "/etc/pihole"
-        # - name: pihole-local-dnsmasq-volume
-        #   mountPath: "/etc/dnsmasq"
-      # volumes:
-      # - name: pihole-local-pihole-volume
-      #   persistentVolumeClaim:
-      #     claimName: pihole-local-storage-claim
-      # - name: pihole-local-dnsmasq-volume
-      #   persistentVolumeClaim:
-      #     claimName: pihole-local-dnsmasq-claim
+        volumeMounts:
+        - name: pihole-volume
+          mountPath: "/etc/pihole"
+        - name: dnsmasq-volume
+          mountPath: "/etc/dnsmasq.d"
+      volumes:
+      - name: pihole-volume
+        persistentVolumeClaim:
+          claimName: pihole-volume-claim
+      - name: dnsmasq-volume
+        persistentVolumeClaim:
+          claimName: dnsmasq-volume-claim
