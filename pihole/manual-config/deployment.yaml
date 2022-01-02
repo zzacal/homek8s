@@ -1,5 +1,7 @@
 # Deploys a single pihole replica accessibel via 192.168.1.160:8000/admin
-#           
+# Requires secret for the password
+#   run kubectl create secret generic pihole-password --from-literal "WEBPASSWORD=[sumpass]"
+#
 ---
 # Define deployment
 apiVersion: apps/v1
@@ -34,7 +36,10 @@ spec:
         - name: TZ
           value: "America/Los_Angeles"
         - name: WEBPASSWORD
-          value: "secret"
+          valueFrom:
+            secretKeyRef:
+              name: pihole-password
+              key: WEBPASSWORD
         volumeMounts:
         - name: pihole-volume
           mountPath: "/etc/pihole"
