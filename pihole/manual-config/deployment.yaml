@@ -16,6 +16,7 @@ metadata:
   name: pihole
   labels:
     app: pihole
+  namespace: pihole
 spec:
   replicas: 1
   selector:
