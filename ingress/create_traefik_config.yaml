@@ -1,0 +1,13 @@
+# ansible-playbook to copy a traefik config to your k3s cluster
+# usage:
+#   ansible-playbook create_traefik_config.yaml -i ../inventory -u pi
+---
+- name: Configure Traefik
+  hosts: all
+  tasks:
+    - name: Copy treafik config
+      copy:
+        src: ./traefik-config.yaml
+        dest: /var/lib/rancher/k3s/server/manifests/
+        mode: 0600
+      become: true
