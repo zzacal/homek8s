@@ -1,3 +1,6 @@
+# Update the k3s installation to enable dashboard
+# apply this to /var/lib/rancher/k3s/server/manifests/ 
+#   in the main installation to enable the dashboard
 apiVersion: helm.cattle.io/v1
 kind: HelmChartConfig
 metadata:
